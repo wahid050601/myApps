@@ -33,11 +33,16 @@
                     ";
 
                     if(mysqli_query($koneksi, $query)) {
+
+                        //insert pembayaran via API 
+                        $pemAPI = InsertPembayaranAPI(mysqli_affected_rows($koneksi), $koneksi, "spp");
+
                         echo json_encode([
                             "status" => "success",
                             "info" => "Pembayaran SPP",
                             "text" => ' <br><strong>Pembayaran BERHASIL ditambah</strong>',
-                            "katPem" => "spp"
+                            "katPem" => "spp",
+                            "pem_api" => $pemAPI
                         ]);
                     }else{
                         echo json_encode([
@@ -388,4 +393,32 @@
         }
 
     }
-?>
+
+    function InsertPembayaranAPI($rowAffected, $conn, $jnsPem){
+
+        // Get data from table pembayaran
+        $getDataTable = "select * from tb_jns_pem order by id_jns desc limit $rowAffected";
+        $exec = mysqli_query($conn, $getDataTable);
+        $datasend = [];
+        while($row = mysqli_fetch_assoc($exec)){$datasend[] = $row;}
+
+        $jsonRaw = json_encode([
+            "kategori" => $jnsPem,
+            "datajson" => $datasend
+        ]);
+
+        $url = "http://host.docker.internal/apps3/api/postpembayaran";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST"); // Bisa juga menggunakan CURLOPT_POST
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonRaw); // Mengirim data JSON
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json", // Header untuk JSON
+            "Content-Length: " . strlen($jsonRaw) // Panjang data yang dikirim
+        ]);
+
+        // Eksekusi cURL dan ambil respons
+        $response = curl_exec($ch);
+
+        return $response;
+    }

@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^getdata/?$ getData.php [L]

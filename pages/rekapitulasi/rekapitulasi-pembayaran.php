@@ -13,32 +13,24 @@
                             <li class="list-group-item">
                                 <div class="form-group">
                                     <select name="sel-tp" id="sel-tp" class="custom-select form-control-sm" style="width: 100%;">
-                                        <option value="">_pilih tahun pelajaran_</option>
-                                        <option value="2020/2021" selected>TP. 2020/2021</option>
-                                        <option value="2021/2022">TP. 2021/2022</option>
-                                        <option value="2022/2023">TP. 2022/2023</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <select name="sel-prodi" id="sel-prodi" class="custom-select form-control-sm" style="width: 100%;">
-                                        <option value="">_pilih prodi_</option>
-                                        <option value="TKJ" selected>Teknik Komputer dan Jaringan</option>
-                                        <option value="AKL">Akuntansi Keuangan dan Lembaga</option>
-                                        <option value="BDP">Bisnis Daring dan Pemasaran</option>
+                                        <option value=""></option>
+                                        <option value="Teknik Komputer dan Jaringan">Teknik Komputer dan Jaringan</option>
+                                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
+                                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <select name="sel-siswa" id="sel-siswa" class="custom-select form-control-sm" style="width: 100%;">
-                                        <option value="">_pilih siswa_</option>
-                                        <option value="20.0001" selected>20.0001 | Alfiah</option>
-                                        <option value="20.0002">20.0002 | Nayla</option>
-                                        <option value="20.0003">20.0003 | Nanda</option>
                                     </select>
                                 </div>
 
-                                <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-cog"></i> proses</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="btn-proc-pem"><i class="fas fa-cog"></i> proses</button>
                             </li>
                         </ul>
                     </div>
@@ -53,32 +45,32 @@
                                     <tr>
                                         <th>No.NIS</th>
                                         <th width="4%">:</th>
-                                        <td>20.0001</td>
+                                        <td class="nis"></td>
                                     </tr>
                                     <tr>
                                         <th>No.NISN</th>
                                         <th width="4%">:</th>
-                                        <td>00333824338</td>
+                                        <td class="nisn"></td>
                                     </tr>
                                     <tr>
                                         <th>Nama Sisw/i</th>
                                         <th width="4%">:</th>
-                                        <td>Alfiah</td>
+                                        <td class="nama"></td>
                                     </tr>
                                     <tr>
                                         <th>Program Studi</th>
                                         <th width="4%">:</th>
-                                        <td>Teknik Komputer dan Jaringan (TKJ)</td>
+                                        <td class="prod"></td>
                                     </tr>
                                     <tr>
                                         <th>Tahun Pelajaran</th>
                                         <th width="4%">:</th>
-                                        <td>2020/2021</td>
+                                        <td class="tp"></td>
                                     </tr>
                                     <tr>
                                         <th>Tahun Kelulusan</th>
                                         <th width="4%">:</th>
-                                        <td>2023</td>
+                                        <td class="thnlulus"></td>
                                     </tr>
                                 </table>
                             </li>
@@ -94,7 +86,7 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between">
                                 <span><i class="fas fa-th-list"></i> History Pembayaran Siswa/i</span>
-                                <!-- <span><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-cloud-download-alt"></i> download</button></span> -->
+                                <span><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-cloud-download-alt"></i> download</button></span>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -221,9 +213,122 @@
 
 
 <script>
+    // Remove loading
     $('#loading').hide();
 
-    $('#tbl-hist-pembayaran').DataTable({
-        scrollX: true
+
+    // Set select option 
+    $.ajax({
+        method: 'post',
+        url: 'pages/rekapitulasi/rekapitulasi-pembayaran-load.php',
+        dataType: 'json',
+        data: {'action' : 'loadDataSiswa'},
+        success: function(dts){
+
+
+            // set option data tahn pelajaran
+            let setTpSiswa = '<option value=""></option>';
+            $.each(dts.datatp, function(idt,valt){
+                setTpSiswa += `<option value="${valt.tp_siswa}">${valt.tp_siswa}</option>`;
+            });
+            $('#sel-tp').html(setTpSiswa);
+            $('#sel-tp').select2({
+                placeholder: "_pilih TP_",
+                width: '100%',
+                theme: 'classic',
+                allowClear: true
+            });
+            $('#sel-tp').on('change' , function(){
+                $('#sel-siswa').html('<option value="">_pilih siswa_</option>');
+                $('#sel-prodi').val('').trigger('change');
+            });
+
+            // set option data prodi
+            $('#sel-prodi').select2({
+                placeholder: "_pilih prodi_",
+                width: '100%',
+                theme: 'classic',
+                allowClear: true
+            });
+
+            // set option data siswa±
+            $('#sel-prodi').on('change', function(){
+                let prodival = $('#sel-prodi').val();
+                let tpval = $('#sel-tp').val();
+                if(tpval != '' && tpval != ''){
+                    let selDataSiswa = '<option value="">_pilih siswa_</option>';
+                    $.each(dts.data, function(ids,vals){
+                        if(vals.tp_siswa == tpval && vals.prod_siswa == prodival){
+                            selDataSiswa += `<option value="${vals.nis_siswa}">${vals.nis_siswa} | ${vals.nama_siswa} | ${vals.kls_siswa}</option>`;
+                        }
+                    });
+                    $('#sel-siswa').html(selDataSiswa);
+                }else{
+                    $('#sel-siswa').html('<option value="">_pilih siswa_</option>');
+                }
+            });
+            $('#sel-siswa').select2({
+                placeholder: "_pilih siswa_",
+                width: '100%',
+                theme: 'classic',
+                allowClear: true
+            })
+        }
     });
+
+
+
+    // Set information detail siswa
+    $('#btn-proc-pem').on('click', function(){
+        let nissiswa = $('#sel-siswa').val();
+        let prodsiswa = $('#sel-prodi').val();
+        let tpsiswa = $('#sel-tp').val();
+
+        if(nissiswa == '' || tpsiswa == '' || prodsiswa == ''){
+            Swal.fire({
+                title: "warning",
+                text: "Silahkan lengkapi Form terlebih dahulu",
+                icon: "warning"
+            });
+        }else{
+            $.ajax({
+                method: 'post',
+                url: 'pages/rekapitulasi/rekapitulasi-pembayaran-load.php',
+                dataType: 'json',
+                data: {
+                    'action' : 'loadDetailPembayaran',
+                    'nissiswa' : nissiswa,
+                    'tpsiswa' : tpsiswa,
+                    'prodisiswa' : prodsiswa
+                },
+                success: function(dts){
+                    if(dts.status == 'success'){
+
+                        // Set info detail siswa
+                        $('.nis').html(dts.datasiswa.nis_siswa);
+                        $('.nisn').html(dts.datasiswa.nisn_siswa);
+                        $('.nama').html(dts.datasiswa.nama_siswa);
+                        $('.prod').html(dts.datasiswa.prod_siswa);
+                        $('.tp').html(dts.datasiswa.tp_siswa);
+                        $('.thnlulus').html('belum lulus'); // temporary status  
+
+
+                    }else{
+                        Swal.fire({
+                            title: dts.status,
+                            text: dts.info,
+                            icon: dts.status
+                        });
+                    }
+                }
+            });
+        }
+
+    });
+
+
+
+    // $('#tbl-hist-pembayaran').DataTable({
+    //     scrollX: true
+    // });
 </script>

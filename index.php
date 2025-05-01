@@ -52,6 +52,8 @@
     <link rel="stylesheet" href="assets/sweetalert/sweetalert2.min.css">
     <!-- Select2 -->
     <link rel="stylesheet" href="assets/select2/select2.css">
+    <!-- <link rel="stylesheet" href="assets/new-select2/node_modules/select2-bootstrap-theme/dist/select2-bootstrap.css"> -->
+    
     <!-- am chart export.css -->
     <!-- <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" /> -->
     <!-- Style.css -->
