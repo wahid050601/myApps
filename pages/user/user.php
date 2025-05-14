@@ -289,7 +289,7 @@
                 <div class="list-menus">
 
                     <ul class="list-group">
-                        <li class="list-group-item"><input type="checkbox" id="mn-pembayaran" value="0"> Pembayaran</li>
+                        <li class="list-group-item"><input type="checkbox" id="mn-pembayaran-user" value="0"> Pembayaran</li>
                         <li class="list-group-item"><input type="checkbox" id="mn-conf-user" value="0"> Konfigurasi User</li>
                         <li class="list-group-item">
                             <div>Data Siswa</div>
@@ -574,7 +574,8 @@
                 },
                 success: function(data){
                     let sts_pembayaran = data.data_menu.pembayaran == '1' ? true : false;
-                    $('#mn-pembayaran').val(data.data_menu.pembayaran).attr('checked', sts_pembayaran);
+                    console.log(sts_pembayaran);
+                    $('#mn-pembayaran-user').val(data.data_menu.pembayaran).attr('checked', true);
 
                     let sts_konfig_user = data.data_menu.konfig_user == '1' ? true : false;
                     $('#mn-conf-user').val(data.data_menu.konfig_user).attr('checked', sts_konfig_user);
@@ -608,10 +609,10 @@
             $('#configUserModal').modal('show');
 
             // Act Pembayaran
-            $('#mn-pembayaran').change(function(){
-                $('#mn-pembayaran').val('1');
-                if (!$('#mn-pembayaran').is(':checked')){
-                    $('#mn-pembayaran').val('0');
+            $('#mn-pembayaran-user').change(function(){
+                $('#mn-pembayaran-user').val('1');
+                if (!$('#mn-pembayaran-user').is(':checked')){
+                    $('#mn-pembayaran-user').val('0');
                 }
             });
 
@@ -700,7 +701,7 @@
         let idUser =  $('tr.selected').data('iduser');
         let jsonConfMenu = {
             iduser: idUser,
-            pembayaran: $('#mn-pembayaran').val(),
+            pembayaran: $('#mn-pembayaran-user').val(),
             config_user: $('#mn-conf-user').val(),
             siswa_aktif: $('#mn-siswa-aktif').val(),
             siswa_non: $('#mn-siswa-non').val(),

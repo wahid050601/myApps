@@ -157,6 +157,7 @@ if(isset($_POST["action"])){
                 rekap_keuangan = ". $menus["rekap_keuangan"] .",
                 rekap_pembayaran = ". $menus["rekap_pem"] ."
                 where admin_id = ". $menus["iduser"];
+                //error_log("LOG FOR UPDATE : ". $updateConfig);
                 $exec = mysqli_query($koneksi, $updateConfig);
 
                 $status = "";

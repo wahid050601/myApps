@@ -38,10 +38,11 @@
                     <div class="col-lg-7">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <i class="fas fa-exclamation-circle"></i> Informasi Data Siswa
+                                <i class="far fa-file-alt"></i> Informasi Data Siswa
                             </li>
                             <li class="list-group-item">
-                                <table class="table table-sm">
+                                <div class="alert alert-warning bg-warning text-dark alert-detail-siswa"><i class="fas fa-exclamation-circle"></i> Pilih salah satu siswa!</div>
+                                <table class="table table-sm" style="display: none;" id="tb-detail-siswa">
                                     <tr>
                                         <th>No.NIS</th>
                                         <th width="4%">:</th>
@@ -86,122 +87,27 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between">
                                 <span><i class="fas fa-th-list"></i> History Pembayaran Siswa/i</span>
-                                <span><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-cloud-download-alt"></i> download</button></span>
+                                <span class="set-btn-download"></span>
                             </div>
                         </li>
                         <li class="list-group-item">
-                            <table class="table table-bordered table-sm" id="tbl-hist-pembayaran">
+                            <div class="alert alert-warning bg-warning text-dark alert-detail-siswa"><i class="fas fa-exclamation-circle"></i> Pilih salah satu siswa!</div>
+                            <table class="table table-bordered table-sm" id="tbl-hist-pembayaran" style="display: none;">
                                 <thead class="bg-primary">
                                     <tr>
                                         <th>no</th>
                                         <th>Tahun Pelajaran</th>
+                                        <th>Kelas</th>
                                         <th>Jenis Pembayaran</th>
                                         <th>Jumlah (Rp)</th>
+                                        <th>Sisa Pembayaran (Rp)</th>
+                                        <th>Tanggal Pembayaran</th>
                                         <th>Status Pembayaran</th>
-                                        <th>Tanggal</th>
                                         <th>Ket.</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2020/2021</td>
-                                        <td>SPP Semester 1</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/08/2020</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2020/2021</td>
-                                        <td>SPP Semester 2</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/02/2021</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2020/2021</td>
-                                        <td>Uang Buku</td>
-                                        <td>500,000</td>
-                                        <td>Belum Bayar</td>
-                                        <td>-</td>
-                                        <td>Tunggakan</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>2021/2022</td>
-                                        <td>SPP Semester 1</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/08/2021</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>2021/2022</td>
-                                        <td>SPP Semester 2</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/02/2022</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>2021/2022</td>
-                                        <td>Uang Kegiatan</td>
-                                        <td>700,000</td>
-                                        <td>Belum Bayar</td>
-                                        <td>-</td>
-                                        <td>Tunggakan</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>2022/2023</td>
-                                        <td>SPP Semester 1</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/08/2022</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>2022/2023</td>
-                                        <td>SPP Semester 2</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/02/2023</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>2023/2024</td>
-                                        <td>SPP Semester 1</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/08/2023</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>2023/2024</td>
-                                        <td>SPP Semester 2</td>
-                                        <td>1,200,000</td>
-                                        <td>Sudah Bayar</td>
-                                        <td>10/02/2024</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11</td>
-                                        <td>2023/2024</td>
-                                        <td>Uang Kelulusan</td>
-                                        <td>1,000,000</td>
-                                        <td>Belum Bayar</td>
-                                        <td>-</td>
-                                        <td>Tunggakan Kelulusan</td>
-                                    </tr>
+                                <tbody class="setdata-hist-pem">
+                                    
                                 </tbody>
                             </table>
                         </li>
@@ -291,6 +197,7 @@
                 icon: "warning"
             });
         }else{
+            $('#loading').show();
             $.ajax({
                 method: 'post',
                 url: 'pages/rekapitulasi/rekapitulasi-pembayaran-load.php',
@@ -303,6 +210,15 @@
                 },
                 success: function(dts){
                     if(dts.status == 'success'){
+                        // set download button
+                        let buttonDownload = '<button type="button" class="btn btn-primary btn-sm" id="download-data-hist"><i class="fas fa-cloud-download-alt"></i> download</button>';
+                        $('.set-btn-download').html(buttonDownload);
+
+                        // remove alert
+                        $('.alert-detail-siswa').hide();
+
+                        // destroy datatable
+                        $('#tbl-hist-pembayaran').DataTable().destroy();
 
                         // Set info detail siswa
                         $('.nis').html(dts.datasiswa.nis_siswa);
@@ -310,9 +226,34 @@
                         $('.nama').html(dts.datasiswa.nama_siswa);
                         $('.prod').html(dts.datasiswa.prod_siswa);
                         $('.tp').html(dts.datasiswa.tp_siswa);
-                        $('.thnlulus').html('belum lulus'); // temporary status  
+                        $('.thnlulus').html(dts.status_lulus); // temporary status  
+                        $('#tb-detail-siswa').show();
+
+                        // Set history pembayaran
+                        let setHistPem = '';
+                        let nums = 1;
+                        $.each(dts.hist_pem, function(idt, valt){
+                            setHistPem += `
+                            <tr>
+                                <th>${nums++}</th>
+                                <td>${valt.jns_tp}</td>
+                                <td>${valt.kelas}</td>
+                                <td>${valt.pembayaran}</td>
+                                <td>${formatRupiah(valt.jns_val)}</td>
+                                <td>${formatRupiah(valt.sisa_pem)}</td>
+                                <td>${valt.tanggal_pem == null ? '-' : valt.tanggal_pem}</td>
+                                <td>${valt.status == 'lunas' ? '<span class="badge badge-success">lunas</span>' : '<span class="badge badge-danger">belum lunas</span>'}</td>
+                                <td>${valt.status == 'lunas' ? '-' : 'tunggakan'}</td>
+                            </tr>`;
+                        });
+                        $('.setdata-hist-pem').html(setHistPem);
+                        $('#tbl-hist-pembayaran').show();
+                        $('#tbl-hist-pembayaran').DataTable({
+                            scrollX: true
+                        });
 
 
+                        $('#loading').hide();
                     }else{
                         Swal.fire({
                             title: dts.status,
@@ -325,10 +266,4 @@
         }
 
     });
-
-
-
-    // $('#tbl-hist-pembayaran').DataTable({
-    //     scrollX: true
-    // });
 </script>

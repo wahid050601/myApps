@@ -49,7 +49,7 @@
                 
                 try{
                     
-                    $query="select * from tb_jns_pem where jns_katg = 'spp' and jns_ket = '$idprod'" ;
+                    $query="select * from tb_jns_pem where jns_katg = 'spp' and jns_ket = '$idprod'";
                     $prep = $koneksi->prepare($query);
                     $prep->execute();
                     $rest = $prep->get_result();
