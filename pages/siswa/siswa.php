@@ -10,6 +10,7 @@
         <button class="btn btn-primary btn-mini rounded" id="btnEdit"><i class="fas fa-pencil-alt"></i>&nbsp; edit</button>
         <button class="btn btn-primary btn-mini rounded" id="btnDell"><i class="fas fa-trash"></i>&nbsp; delete</button>
         <button class="btn btn-primary btn-mini rounded" id="btnRegis"><i class="fas fa-cogs"></i>&nbsp; register</button>
+        <button class="btn btn-primary btn-mini rounded" id="btnSync"><i class="fas fa-recycle"></i>&nbsp; sinkron</button>
         <!-- <button class="btn btn-success btn-mini rounded"><i class="fas fa-download"></i>&nbsp; download</button> -->
 
         <div class="data-content mt-3">
@@ -598,6 +599,34 @@
                     icon: 'warning'
                 });
             }
+        });
+
+        // Syncrone Data Siswa
+        $('#btnSync').on('click', function(){
+            Swal.fire({
+                icon: "question",
+                title: "Sync Data Siswa",
+                text: "Data siswa akan di sinkronisasi dengan database aplikasi siswa. ingin melakukan sinkron ?",
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#loading').show();
+                    $.ajax({
+                        method: 'POST',
+                        url: 'pages/siswa/siswa-func.php',
+                        data: {'action' : 'syncsiswa'},
+                        dataType: 'json',
+                        success: function(msg){
+                            $('#loading').hide();
+                            Swal.fire({
+                                icon: msg.status,
+                                title: msg.info,
+                                text: msg.message,
+                            });
+                        }
+                    })
+                }
+            });
         });
    });
 

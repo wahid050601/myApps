@@ -155,6 +155,98 @@
                     ]);
                 }
             break;
+
+            case "syncsiswa" :
+                try {
+                    // Hit API get data siswa
+                    $paramdata = [
+                        "action" => "getdata",
+                        "data" => null
+                    ];
+                    $dataSync = json_encode($paramdata);
+                    $ch = curl_init($endPointAPI . "syncdatasiswa");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataSync);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        'Content-Type: application/json',
+                        'Content-Length: ' . strlen($dataSync)
+                    ]);
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    $resp = json_decode($response, true);
+                    $dataCompaire = $resp["data"];
+
+
+                    $getTotalSiswa = "select count(1) as total_siswa from tb_siswa where status_siswa = 'aktif'";
+                    $execTotal = $koneksi->query($getTotalSiswa);
+                    $total = $execTotal->fetch_assoc();
+                    $totalSiswa = $total["total_siswa"];
+                    $thread = ceil($totalSiswa / 10);
+
+                    
+                    $totalsync = 0;
+                    $nis = [];
+                    for ($i=1; $i <= $thread; $i++) {
+                        $offset = ($i - 1) * 10;
+                        $getDataSiswa = "select a.*, c.nama_rbl from tb_siswa a left join tb_rombel_siswa_stg b on a.id = b.id_siswa
+                        left join tb_rombel_siswa c on b.id_rbl = c.id_rbl
+                        where a.status_siswa = 'aktif' limit 10 offset $offset";
+
+                        $execGetSiswa = $koneksi->query($getDataSiswa);
+                        $siswaData = [];
+                        while($row = $execGetSiswa->fetch_assoc()){
+                            $siswaData[] = $row;
+                        }
+
+                        //Validate ex data
+                        $datasiswafix = [];
+                        foreach($siswaData as $siswa){
+                            if(!in_array($siswa["nis_siswa"], $dataCompaire)){
+                                array_push($datasiswafix, $siswa);
+                                array_push($nis, $siswa["nis_siswa"]);
+                                $totalsync++;
+                            }
+                        }
+                        
+                        // Hit API sync data siswa
+                        $dataparam = [
+                            "action" => "syncdata",
+                            "data" => $datasiswafix
+                        ];
+                        $dataSync = json_encode($dataparam);
+                        $ch = curl_init($endPointAPI . "syncdatasiswa.php");
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_POST, true);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataSync);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                            'Content-Type: application/json',
+                            'Content-Length: ' . strlen($dataSync)
+                        ]);
+                        $response = curl_exec($ch);
+                        curl_close($ch);
+                        $resp = json_decode($response, true);
+                        if($resp["status"] == "success"){
+                            $datasiswafix = [];
+                        }
+                    }
+
+                    $message = $totalsync == 0 ? "Semua data siswa sudah dilakukan sinkronisasi" : "berhasil melakukan sinkronisasi pada database aplikasi siwa dengan total data $totalsync";
+                    echo json_encode([
+                        "status" => "success",
+                        "info" => "Berhasil sinkronisasi",
+                        "message" => $message,
+                        "totalsync" => $totalsync,
+                    ]);
+                    $koneksi->close();
+
+                }catch(Exception $e){
+                    echo json_encode([
+                        "status" => "error",
+                        "info" => $e->getMessage()
+                    ]);
+                }
+            break;
         }
     }
     

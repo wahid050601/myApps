@@ -35,7 +35,7 @@
                     if(mysqli_query($koneksi, $query)) {
 
                         //insert pembayaran via API 
-                        $pemAPI = InsertPembayaranAPI(mysqli_affected_rows($koneksi), $koneksi, "spp");
+                        $pemAPI = InsertPembayaranAPI(mysqli_affected_rows($koneksi), $koneksi, "spp", $endPointAPI);
 
                         echo json_encode([
                             "status" => "success",
@@ -213,6 +213,8 @@
                 $query .= $imp_query;
                 $exec = mysqli_query($koneksi, $query);
                 if($exec){
+                    //insert pembayaran via API 
+                    $pemAPI = InsertPembayaranAPI(mysqli_affected_rows($koneksi), $koneksi, "ujian", $endPointAPI);
                     echo json_encode([
                         "status" => "success",
                         "info" => "Pembayaran UJIAN",
@@ -308,6 +310,7 @@
                     $query1 = "insert into tb_jns_pem values (null, '$val_data', '".strtoupper($kls_kegiatan)."', 'kegiatan', $nom_kegiatan, $ccl_kegiatan, '$tp_kegiatan', '$smtr_kegiatan', '$prodi_kegiatan')";
                     $execQ = mysqli_query($koneksi, $query1);
                     if($execQ){
+                        $pemAPI = InsertPembayaranAPI(mysqli_affected_rows($koneksi), $koneksi, "kegiatan", $endPointAPI);
                         echo json_encode([
                             "status" => "success",
                             "info" => "Pembayaran KEGIATAN",
@@ -394,7 +397,7 @@
 
     }
 
-    function InsertPembayaranAPI($rowAffected, $conn, $jnsPem){
+    function InsertPembayaranAPI($rowAffected, $conn, $jnsPem, $endPointAPI){
 
         // Get data from table pembayaran
         $getDataTable = "select * from tb_jns_pem order by id_jns desc limit $rowAffected";
@@ -407,7 +410,7 @@
             "datajson" => $datasend
         ]);
 
-        $url = "http://host.docker.internal/apps3/api/postpembayaran";
+        $url = $endPointAPI. "postpembayaran";
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST"); // Bisa juga menggunakan CURLOPT_POST

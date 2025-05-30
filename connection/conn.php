@@ -13,4 +13,5 @@
 
     $koneksi = new mysqli(HOST, USER, PASS, DEBE);
     // $koneksi = mysqli_connect($host, $user, $pass, $debe);
+    $endPointAPI = "http://host.docker.internal/apps3/api/";
 
